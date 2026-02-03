@@ -1,0 +1,1505 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>رمضان كرافت S1 | السيرفر الرسمي</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800;900&family=Almarai:wght@400;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-dark: #0a0520;
+            --primary-purple: #5a2d8c;
+            --accent-gold: #ffcc00;
+            --accent-gold-light: #ffdb4d;
+            --green-law: #27ae60;
+            --yellow-law: #f39c12;
+            --blue-law: #3498db;
+            --purple-law: #9b59b6;
+            --red-law: #e74c3c;
+            --text-light: #ffffff;
+            --card-bg: rgba(30, 15, 60, 0.9);
+            --gradient-purple: linear-gradient(135deg, #5a2d8c 0%, #3d1368 100%);
+            --gradient-gold: linear-gradient(135deg, #ffcc00 0%, #ffdb4d 100%);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Tajawal', 'Almarai', sans-serif;
+        }
+        
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #0a0520 0%, #1a0b35 50%, #0a0520 100%);
+            color: var(--text-light);
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+        
+        /* شاشة التحميل */
+        .loader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--primary-dark);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            z-index: 9999;
+            transition: opacity 0.5s, visibility 0.5s;
+        }
+        
+        .loader.hidden {
+            opacity: 0;
+            visibility: hidden;
+        }
+        
+        .loader-logo {
+            font-size: 3.5rem;
+            font-weight: 900;
+            background: var(--gradient-gold);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 20px;
+            text-shadow: 0 0 30px rgba(255, 204, 0, 0.3);
+        }
+        
+        .loader-bar {
+            width: 300px;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            overflow: hidden;
+            margin-top: 20px;
+        }
+        
+        .loader-progress {
+            height: 100%;
+            width: 0%;
+            background: var(--gradient-purple);
+            border-radius: 10px;
+            transition: width 2s ease-in-out;
+        }
+        
+        /* أنيميشن الخلفية */
+        .background-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+        
+        .star {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            animation: twinkle 3s infinite;
+        }
+        
+        .lantern {
+            position: absolute;
+            font-size: 24px;
+            color: var(--accent-gold);
+            animation: float 8s infinite ease-in-out;
+            filter: drop-shadow(0 0 10px rgba(255, 204, 0, 0.5));
+        }
+        
+        .moon {
+            position: absolute;
+            font-size: 80px;
+            color: var(--accent-gold);
+            animation: moonFloat 20s infinite linear;
+            opacity: 0.7;
+        }
+        
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.2; }
+            50% { opacity: 1; }
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-30px) rotate(5deg); }
+        }
+        
+        @keyframes moonFloat {
+            0% { transform: translate(-50px, -50px) rotate(0deg); }
+            100% { transform: translate(calc(100vw + 50px), calc(100vh + 50px)) rotate(360deg); }
+        }
+        
+        /* شريط حالة السيرفر */
+        .server-status {
+            background: var(--gradient-purple);
+            padding: 12px 0;
+            text-align: center;
+            border-bottom: 3px solid var(--accent-gold);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.5);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+        }
+        
+        .status-content {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: wrap;
+            padding: 0 10px;
+        }
+        
+        .status-badge {
+            background: var(--accent-gold);
+            color: var(--primary-dark);
+            padding: 8px 25px;
+            border-radius: 30px;
+            font-weight: 900;
+            font-size: 1.3rem;
+            animation: pulse 2s infinite;
+            box-shadow: 0 0 25px var(--accent-gold);
+            letter-spacing: 1px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .ramadan-countdown {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: white;
+            background: rgba(0, 0, 0, 0.3);
+            padding: 8px 20px;
+            border-radius: 20px;
+            border: 1px solid var(--accent-gold);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { 
+                transform: scale(1); 
+                box-shadow: 0 0 25px var(--accent-gold); 
+            }
+            50% { 
+                transform: scale(1.05); 
+                box-shadow: 0 0 35px var(--accent-gold); 
+            }
+        }
+        
+        /* قائمة التنقل */
+        .nav-container {
+            background: rgba(20, 10, 40, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 15px 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            border-bottom: 1px solid rgba(255, 204, 0, 0.2);
+        }
+        
+        .nav-menu {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            flex-wrap: wrap;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .nav-btn {
+            background: rgba(90, 45, 140, 0.7);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 10px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex: 1;
+            min-width: 160px;
+            justify-content: center;
+            white-space: nowrap;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .nav-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
+        }
+        
+        .nav-btn:hover::before {
+            left: 100%;
+        }
+        
+        .nav-btn:hover {
+            background: var(--primary-purple);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(90, 45, 140, 0.5);
+        }
+        
+        .nav-btn.active {
+            background: var(--accent-gold);
+            color: var(--primary-dark);
+            box-shadow: 0 0 20px var(--accent-gold);
+            transform: translateY(-2px);
+        }
+        
+        /* الهيدر الرئيسي */
+        .hero {
+            text-align: center;
+            padding: 50px 20px;
+            background: linear-gradient(to bottom, rgba(10, 5, 32, 0.9), rgba(30, 15, 60, 0.7));
+            margin-bottom: 30px;
+            border-bottom: 2px solid var(--accent-gold);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 100%;
+            background: radial-gradient(circle at 30% 30%, rgba(255, 204, 0, 0.1) 0%, transparent 50%),
+                      radial-gradient(circle at 70% 70%, rgba(90, 45, 140, 0.1) 0%, transparent 50%);
+        }
+        
+        .logo {
+            font-size: 3.5rem;
+            font-weight: 900;
+            margin-bottom: 10px;
+            background: var(--gradient-gold);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 40px rgba(255, 204, 0, 0.4);
+            letter-spacing: 2px;
+            position: relative;
+            display: inline-block;
+        }
+        
+        .logo::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 200px;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, var(--accent-gold), transparent);
+        }
+        
+        .season {
+            font-size: 1.8rem;
+            color: var(--accent-gold);
+            margin-bottom: 20px;
+            font-weight: 800;
+            text-shadow: 0 0 20px rgba(255, 204, 0, 0.5);
+        }
+        
+        .server-status-text {
+            font-size: 1.2rem;
+            color: #ff6b6b;
+            background: rgba(255, 107, 107, 0.1);
+            padding: 10px 20px;
+            border-radius: 20px;
+            display: inline-block;
+            margin-bottom: 20px;
+            border: 1px solid #ff6b6b;
+            animation: statusPulse 3s infinite;
+        }
+        
+        @keyframes statusPulse {
+            0%, 100% { opacity: 0.8; }
+            50% { opacity: 1; }
+        }
+        
+        .tagline {
+            font-size: 1.2rem;
+            color: #d0d0ff;
+            max-width: 800px;
+            margin: 0 auto;
+            line-height: 1.6;
+            background: rgba(0, 0, 0, 0.3);
+            padding: 20px;
+            border-radius: 15px;
+            border: 1px solid rgba(255, 204, 0, 0.2);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+        
+        /* المحتوى الرئيسي */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        .section {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 40px;
+            border: 1px solid rgba(255, 204, 0, 0.3);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s, transform 0.8s, box-shadow 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: var(--gradient-gold);
+        }
+        
+        .section:hover {
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+            border-color: var(--accent-gold);
+        }
+        
+        .section.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .section-title {
+            font-size: 1.8rem;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid var(--accent-gold);
+            color: var(--accent-gold);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            position: relative;
+        }
+        
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 100px;
+            height: 2px;
+            background: var(--accent-gold);
+        }
+        
+        /* قسم الأخبار */
+        .news-section {
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+        }
+        
+        .news-card {
+            background: linear-gradient(135deg, rgba(60, 30, 100, 0.9), rgba(40, 20, 70, 0.9));
+            border-radius: 15px;
+            padding: 25px;
+            border: 2px solid rgba(255, 204, 0, 0.3);
+            transition: all 0.4s;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .news-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 5px;
+            height: 100%;
+            background: var(--accent-gold);
+        }
+        
+        .news-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+            border-color: var(--accent-gold);
+        }
+        
+        .news-header {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .news-icon {
+            background: var(--accent-gold);
+            color: var(--primary-dark);
+            width: 60px;
+            height: 60px;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            box-shadow: 0 0 20px var(--accent-gold);
+            flex-shrink: 0;
+        }
+        
+        .news-content h3 {
+            color: var(--accent-gold);
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            font-weight: 800;
+        }
+        
+        .news-content p {
+            color: #e0e0ff;
+            line-height: 1.8;
+            font-size: 1.1rem;
+            margin-bottom: 15px;
+        }
+        
+        .news-date {
+            color: var(--accent-gold);
+            font-size: 1rem;
+            margin-top: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 600;
+            background: rgba(0, 0, 0, 0.3);
+            padding: 10px 15px;
+            border-radius: 10px;
+            display: inline-block;
+        }
+        
+        /* قسم القوانين */
+        .laws-tabs {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 30px;
+        }
+        
+        .law-tab {
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid transparent;
+            padding: 15px 25px;
+            border-radius: 12px;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 700;
+            flex: 1;
+            min-width: 170px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        
+        .law-tab::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.5s;
+        }
+        
+        .law-tab:hover::before {
+            left: 100%;
+        }
+        
+        .law-tab:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+        }
+        
+        .law-tab.active {
+            box-shadow: 0 0 25px currentColor;
+            transform: translateY(-3px);
+            border-color: currentColor;
+        }
+        
+        .law-tab.green { color: var(--green-law); }
+        .law-tab.yellow { color: var(--yellow-law); }
+        .law-tab.blue { color: var(--blue-law); }
+        .law-tab.purple { color: var(--purple-law); }
+        .law-tab.red { color: var(--red-law); }
+        
+        .laws-content {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        .laws-content.active {
+            display: block;
+        }
+        
+        .law-item {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 18px;
+            border-left: 5px solid;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .law-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 5px;
+            height: 100%;
+            background: currentColor;
+            opacity: 0.1;
+        }
+        
+        .law-item:hover {
+            transform: translateX(10px);
+            background: rgba(255, 255, 255, 0.08);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        }
+        
+        .law-number {
+            font-weight: 800;
+            margin-bottom: 10px;
+            font-size: 1.2rem;
+            color: var(--accent-gold);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .law-text {
+            color: #e0e0ff;
+            line-height: 1.7;
+            font-size: 1.05rem;
+            padding-right: 10px;
+        }
+        
+        .law-red {
+            animation: redPulse 3s infinite;
+            border-color: var(--red-law) !important;
+        }
+        
+        @keyframes redPulse {
+            0%, 100% { 
+                box-shadow: 0 0 10px rgba(231, 76, 60, 0.3); 
+            }
+            50% { 
+                box-shadow: 0 0 25px rgba(231, 76, 60, 0.8); 
+            }
+        }
+        
+        /* قسم الدعم */
+        .support-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            margin-top: 20px;
+        }
+        
+        .admin-card {
+            background: linear-gradient(135deg, rgba(90, 45, 140, 0.9), rgba(60, 30, 100, 0.9));
+            border-radius: 15px;
+            padding: 25px;
+            text-align: center;
+            transition: all 0.4s;
+            border: 2px solid rgba(255, 204, 0, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .admin-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: var(--gradient-gold);
+        }
+        
+        .admin-card:hover {
+            transform: translateY(-8px);
+            border-color: var(--accent-gold);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+        }
+        
+        .admin-icon {
+            background: var(--accent-gold);
+            color: var(--primary-dark);
+            width: 70px;
+            height: 70px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            margin: 0 auto 20px;
+            box-shadow: 0 0 25px var(--accent-gold);
+            transition: all 0.3s;
+        }
+        
+        .admin-card:hover .admin-icon {
+            transform: rotateY(180deg);
+            box-shadow: 0 0 35px var(--accent-gold);
+        }
+        
+        .admin-name {
+            color: var(--accent-gold);
+            font-size: 1.4rem;
+            margin-bottom: 15px;
+            font-weight: 800;
+        }
+        
+        .admin-number {
+            direction: ltr;
+            font-family: monospace;
+            background: rgba(0, 0, 0, 0.4);
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: block;
+            font-size: 1.1rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s;
+        }
+        
+        .admin-number:hover {
+            background: rgba(0, 0, 0, 0.6);
+            border-color: var(--accent-gold);
+        }
+        
+        .whatsapp-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            background: #25D366;
+            color: white;
+            text-decoration: none;
+            padding: 14px 30px;
+            border-radius: 30px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            transition: all 0.3s;
+            width: 100%;
+            justify-content: center;
+            box-shadow: 0 5px 15px rgba(37, 211, 102, 0.3);
+        }
+        
+        .whatsapp-btn:hover {
+            background: #128C7E;
+            transform: scale(1.05);
+            box-shadow: 0 10px 25px rgba(37, 211, 102, 0.5);
+        }
+        
+        /* قسم المجتمع */
+        .community-card {
+            text-align: center;
+            padding: 40px 30px;
+            background: linear-gradient(135deg, rgba(37, 211, 102, 0.15), rgba(30, 15, 60, 0.9));
+            border-radius: 20px;
+            border: 3px solid #25D366;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .community-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 30% 30%, rgba(37, 211, 102, 0.1) 0%, transparent 50%);
+        }
+        
+        .community-icon {
+            font-size: 5rem;
+            color: #25D366;
+            margin-bottom: 25px;
+            filter: drop-shadow(0 0 25px #25D366);
+            animation: whatsappPulse 2s infinite;
+        }
+        
+        .community-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 15px;
+            background: #25D366;
+            color: white;
+            text-decoration: none;
+            padding: 18px 40px;
+            border-radius: 35px;
+            font-size: 1.3rem;
+            font-weight: 800;
+            margin-top: 25px;
+            transition: all 0.3s;
+            box-shadow: 0 10px 30px rgba(37, 211, 102, 0.4);
+        }
+        
+        .community-btn:hover {
+            background: #128C7E;
+            transform: scale(1.08);
+            box-shadow: 0 15px 40px rgba(37, 211, 102, 0.6);
+        }
+        
+        @keyframes whatsappPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        
+        /* الفوتر */
+        footer {
+            background: linear-gradient(to top, rgba(10, 5, 32, 0.97), rgba(30, 15, 60, 0.95));
+            padding: 50px 20px 30px;
+            margin-top: 60px;
+            border-top: 3px solid var(--accent-gold);
+            position: relative;
+        }
+        
+        footer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 20% 80%, rgba(255, 204, 0, 0.05) 0%, transparent 50%);
+        }
+        
+        .founders-section {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+        
+        .founder-card {
+            background: rgba(255, 204, 0, 0.1);
+            padding: 25px;
+            border-radius: 15px;
+            text-align: center;
+            border: 2px solid rgba(255, 204, 0, 0.3);
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .founder-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--accent-gold);
+            box-shadow: 0 15px 35px rgba(255, 204, 0, 0.2);
+        }
+        
+        .founder-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: var(--accent-gold);
+        }
+        
+        .founder-name {
+            color: var(--accent-gold);
+            font-size: 1.5rem;
+            font-weight: 900;
+            margin-bottom: 10px;
+        }
+        
+        .founder-role {
+            color: #aaa;
+            font-size: 1rem;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+        
+        .founder-desc {
+            color: #ccc;
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+        
+        .tech-badges {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 12px;
+            margin: 30px 0;
+        }
+        
+        .tech-badge {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-size: 0.9rem;
+            color: #ccc;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s;
+            border: 1px solid transparent;
+        }
+        
+        .tech-badge:hover {
+            background: rgba(255, 255, 255, 0.15);
+            transform: translateY(-3px);
+            border-color: var(--accent-gold);
+            color: white;
+        }
+        
+        .copyright {
+            text-align: center;
+            color: #aaa;
+            margin-top: 30px;
+            font-size: 1rem;
+            line-height: 1.8;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        /* تحسينات للجوال */
+        @media (max-width: 768px) {
+            .loader-logo { font-size: 2.5rem; }
+            .logo { font-size: 2.5rem; }
+            .season { font-size: 1.4rem; }
+            .nav-menu { flex-direction: column; }
+            .nav-btn { min-width: 100%; margin-bottom: 5px; }
+            .section { padding: 20px; margin-bottom: 30px; }
+            .status-badge { font-size: 1.1rem; padding: 6px 20px; }
+            .ramadan-countdown { font-size: 1rem; }
+            .support-grid { grid-template-columns: 1fr; }
+            .law-tab { min-width: 100%; }
+            .admin-icon { width: 60px; height: 60px; font-size: 1.8rem; }
+            .community-icon { font-size: 4rem; }
+            .community-btn { padding: 15px 30px; font-size: 1.1rem; }
+            .founders-section { grid-template-columns: 1fr; }
+            .section-title { font-size: 1.5rem; }
+            .news-icon { width: 50px; height: 50px; font-size: 1.5rem; }
+        }
+        
+        @media (max-width: 480px) {
+            .logo { font-size: 2rem; }
+            .section-title { font-size: 1.3rem; }
+            .admin-card { padding: 20px; }
+            .law-tab { padding: 12px 15px; font-size: 0.9rem; }
+            .tech-badge { padding: 8px 15px; font-size: 0.8rem; }
+            .news-content h3 { font-size: 1.3rem; }
+            .news-content p { font-size: 1rem; }
+            .server-status-text { font-size: 1rem; padding: 8px 15px; }
+        }
+        
+        /* أنيميشن الفيدإن */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+    <!-- شاشة التحميل -->
+    <div class="loader" id="loader">
+        <div class="loader-logo">RAMADAN CRAFT</div>
+        <div class="season">الموسم الأول S1</div>
+        <div class="loader-bar">
+            <div class="loader-progress" id="loaderProgress"></div>
+        </div>
+        <p style="margin-top: 20px; color: #aaa;">جاري تحميل تجربة رمضان كرافت...</p>
+    </div>
+    
+    <!-- أنيميشن الخلفية -->
+    <div class="background-animation" id="backgroundAnimation"></div>
+    
+    <!-- حالة السيرفر -->
+    <div class="server-status">
+        <div class="status-content">
+            <div class="status-badge">
+                <i class="fas fa-tools"></i> قيد الإنشاء
+            </div>
+            <div class="ramadan-countdown" id="ramadanTimer">
+                <i class="fas fa-calendar-star"></i> 
+                رمضان يبدأ بعد: <span id="ramadanDays">14</span> يوم
+            </div>
+        </div>
+    </div>
+    
+    <!-- قائمة التنقل -->
+    <div class="nav-container">
+        <div class="nav-menu">
+            <button class="nav-btn active" data-target="news">
+                <i class="fas fa-newspaper"></i> الأخبار
+            </button>
+            <button class="nav-btn" data-target="laws">
+                <i class="fas fa-book"></i> القوانين
+            </button>
+            <button class="nav-btn" data-target="support">
+                <i class="fas fa-headset"></i> الدعم الفني
+            </button>
+            <button class="nav-btn" data-target="community">
+                <i class="fab fa-whatsapp"></i> المجتمع
+            </button>
+            <button class="nav-btn" data-target="founders">
+                <i class="fas fa-crown"></i> المؤسسين
+            </button>
+        </div>
+    </div>
+    
+    <!-- الهيدر الرئيسي -->
+    <div class="hero">
+        <h1 class="logo">رمضان كرافت</h1>
+        <div class="season">S1 - الموسم الأول</div>
+        <div class="server-status-text">
+            <i class="fas fa-hammer"></i> السيرفر قيد الإنشاء والتطوير
+        </div>
+        <p class="tagline">
+            أول سيرفر ماين كرافت رمضاني حصري يجمع بين المتعة والتحدي في جو إسلامي راقي، 
+            تم تطويره بأكثر من 70 لغة برمجة لضمان تجربة لعب استثنائية
+        </p>
+    </div>
+    
+    <!-- المحتوى الرئيسي -->
+    <div class="container" id="mainContent" style="display: none;">
+        <!-- قسم الأخبار -->
+        <section id="news" class="section active">
+            <h2 class="section-title">
+                <i class="fas fa-bullhorn"></i> أخبار السيرفر
+            </h2>
+            <div class="news-section">
+                <div class="news-card">
+                    <div class="news-header">
+                        <div class="news-icon">
+                            <i class="fas fa-hammer"></i>
+                        </div>
+                        <div>
+                            <h3>جاري العمل على السيرفر</h3>
+                        </div>
+                    </div>
+                    <div class="news-content">
+                        <p>نعمل حالياً على تطوير وتحضير سيرفر رمضان كرافت S1 لتقديم تجربة لعب فريدة ومميزة تناسب أجواء شهر رمضان المبارك.</p>
+                        <p>يشمل التطوير: بناء أنظمة اقتصادية متقدمة، تصميم فعاليات رمضانية حصرية، تطوير أنظمة الحماية، وبناء مجتمع إسلامي راقي.</p>
+                        <p>السيرفر سيتم إطلاقه بالتزامن مع بداية شهر رمضان المبارك، حيث سيتم الإعلان عن التاريخ المحدد قريباً.</p>
+                        <p><strong>الحالة الحالية:</strong> السيرفر قيد الإنشاء - رمضان لم يأتِ بعد (باقي 14 يوم)</p>
+                        <div class="news-date">
+                            <i class="far fa-calendar-alt"></i> آخر تحديث: 15 شعبان 1445
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- قسم القوانين -->
+        <section id="laws" class="section">
+            <h2 class="section-title">
+                <i class="fas fa-gavel"></i> دستور السيرفر (50 قانون)
+            </h2>
+            
+            <div class="laws-tabs">
+                <button class="law-tab green active" data-tab="ethics">
+                    <i class="fas fa-handshake"></i> الأخلاقيات
+                </button>
+                <button class="law-tab yellow" data-tab="building">
+                    <i class="fas fa-home"></i> البناء
+                </button>
+                <button class="law-tab blue" data-tab="technical">
+                    <i class="fas fa-code"></i> النزاهة
+                </button>
+                <button class="law-tab purple" data-tab="economy">
+                    <i class="fas fa-coins"></i> الاقتصاد
+                </button>
+                <button class="law-tab red" data-tab="social">
+                    <i class="fas fa-users"></i> التواصل
+                </button>
+            </div>
+            
+            <div id="lawsContent"></div>
+        </section>
+        
+        <!-- قسم الدعم الفني -->
+        <section id="support" class="section">
+            <h2 class="section-title">
+                <i class="fas fa-phone-alt"></i> الدعم الفني المباشر
+            </h2>
+            <p style="text-align: center; margin-bottom: 30px; color: #d0d0ff; font-size: 1.1rem;">
+                للتواصل المباشر مع إدارة السيرفر عبر الواتساب (24/7)
+            </p>
+            
+            <div class="support-grid">
+                <div class="admin-card">
+                    <div class="admin-icon">
+                        <i class="fas fa-user-shield"></i>
+                    </div>
+                    <h3 class="admin-name">الإدارة الأولى</h3>
+                    <span class="admin-number">+966 50 767 8776</span>
+                    <a href="https://wa.me/966507678776" class="whatsapp-btn" target="_blank">
+                        <i class="fab fa-whatsapp"></i> تواصل عبر واتساب
+                    </a>
+                </div>
+                
+                <div class="admin-card">
+                    <div class="admin-icon">
+                        <i class="fas fa-user-tie"></i>
+                    </div>
+                    <h3 class="admin-name">الإدارة الثانية</h3>
+                    <span class="admin-number">+966 53 245 8849</span>
+                    <a href="https://wa.me/966532458849" class="whatsapp-btn" target="_blank">
+                        <i class="fab fa-whatsapp"></i> تواصل عبر واتساب
+                    </a>
+                </div>
+                
+                <div class="admin-card">
+                    <div class="admin-icon">
+                        <i class="fas fa-user-cog"></i>
+                    </div>
+                    <h3 class="admin-name">الإدارة الثالثة</h3>
+                    <span class="admin-number">+966 05 003 70982</span>
+                    <a href="https://wa.me/9660500370982" class="whatsapp-btn" target="_blank">
+                        <i class="fab fa-whatsapp"></i> تواصل عبر واتساب
+                    </a>
+                </div>
+            </div>
+        </section>
+        
+        <!-- قسم المجتمع -->
+        <section id="community" class="section">
+            <h2 class="section-title">
+                <i class="fab fa-whatsapp"></i> انضم إلى مجتمعنا
+            </h2>
+            
+            <div class="community-card">
+                <div class="community-icon">
+                    <i class="fab fa-whatsapp"></i>
+                </div>
+                <h3 style="color: white; margin-bottom: 20px; font-size: 1.8rem;">
+                    قروب الواتساب الرسمي
+                </h3>
+                <p style="color: #d0d0ff; line-height: 1.8; font-size: 1.1rem; max-width: 800px; margin: 0 auto;">
+                    انضم إلى مجتمعنا النشط على الواتساب لتكون أول من يعرف عن التحديثات، الفعاليات الحصرية، المسابقات الرمضانية، وآخر أخبار السيرفر.
+                    <br><br>
+                    في القروب: تحديثات مباشرة، مسابقات يومية، جوائز قيمة، ودعم فني سريع.
+                </p>
+                <a href="https://chat.whatsapp.com/BCSWD6eyjHz96Py8ZlaSGl" class="community-btn" target="_blank">
+                    <i class="fab fa-whatsapp"></i> انضم الآن إلى القروب الرسمي
+                </a>
+            </div>
+        </section>
+        
+        <!-- قسم المؤسسين -->
+        <section id="founders" class="section">
+            <h2 class="section-title">
+                <i class="fas fa-crown"></i> مؤسسو السيرفر
+            </h2>
+            
+            <div class="founders-section">
+                <div class="founder-card">
+                    <div class="founder-name">نواف</div>
+                    <div class="founder-role">المؤسس والمطور الرئيسي</div>
+                    <p class="founder-desc">
+                        المسؤول عن تطوير السيرفر بالكامل وتصميم الأنظمة التقنية المتقدمة باستخدام أكثر من 70 لغة برمجة لتقديم أفضل تجربة للمستخدمين.
+                    </p>
+                </div>
+                
+                <div class="founder-card">
+                    <div class="founder-name">عبدالله</div>
+                    <div class="founder-role">نائب المؤسس</div>
+                    <p class="founder-desc">
+                        المسؤول عن إدارة المجتمع، تنظيم الفعاليات الرمضانية، وضمان تجربة لعب ممتعة ومنظمة لجميع اللاعبين.
+                    </p>
+                </div>
+                
+                <div class="founder-card">
+                    <div class="founder-name">عبدالملك</div>
+                    <div class="founder-role">مؤسس الفكرة والمراجع</div>
+                    <p class="founder-desc">
+                        صاحب فكرة السيرفر الرمضاني ومصمم القوانين والأنظمة، المسؤول عن المراجعة النهائية وضمان الجودة.
+                    </p>
+                </div>
+            </div>
+            
+            <div class="tech-badges">
+                <span class="tech-badge"><i class="fab fa-html5"></i> HTML5</span>
+                <span class="tech-badge"><i class="fab fa-css3-alt"></i> CSS3</span>
+                <span class="tech-badge"><i class="fab fa-js"></i> JavaScript</span>
+                <span class="tech-badge"><i class="fab fa-python"></i> Python</span>
+                <span class="tech-badge"><i class="fab fa-java"></i> Java</span>
+                <span class="tech-badge"><i class="fas fa-code"></i> C++</span>
+                <span class="tech-badge"><i class="fab fa-php"></i> PHP</span>
+                <span class="tech-badge"><i class="fab fa-node-js"></i> Node.js</span>
+                <span class="tech-badge"><i class="fas fa-database"></i> MySQL</span>
+                <span class="tech-badge"><i class="fab fa-git-alt"></i> Git</span>
+                <span class="tech-badge">+70 لغة أخرى</span>
+            </div>
+        </section>
+    </div>
+    
+    <!-- الفوتر -->
+    <footer>
+        <div class="container">
+            <div class="copyright">
+                جميع الحقوق محفوظة © 2024-2026 رمضان كرافت S1 | 
+                تم التطوير بأكثر من 70 لغة برمجة لضمان أفضل تجربة للمستخدمين<br>
+                هذا السيرفر حصري ولا يسمح بنسخ أو تقليد أي من محتوياته أو أنظمته
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // تهيئة الصفحة
+        document.addEventListener('DOMContentLoaded', function() {
+            // بدء شاشة التحميل
+            startLoader();
+            
+            // تهيئة جميع الوظائف بعد التحميل
+            setTimeout(() => {
+                document.getElementById('loader').classList.add('hidden');
+                document.getElementById('mainContent').style.display = 'block';
+                
+                // إنشاء الخلفية المتحركة
+                createBackground();
+                
+                // تهيئة التنقل بين الأقسام
+                initNavigation();
+                
+                // تحميل القوانين
+                loadLaws();
+                
+                // تهيئة أنيميشن التمرير
+                initScrollAnimation();
+                
+                // تحديث حالة رمضان
+                updateRamadanStatus();
+            }, 2500);
+        });
+        
+        // شاشة التحميل
+        function startLoader() {
+            const progressBar = document.getElementById('loaderProgress');
+            let width = 0;
+            const interval = setInterval(() => {
+                if (width >= 100) {
+                    clearInterval(interval);
+                } else {
+                    width += Math.random() * 15 + 5;
+                    if (width > 100) width = 100;
+                    progressBar.style.width = width + '%';
+                }
+            }, 100);
+        }
+        
+        // إنشاء الخلفية المتحركة
+        function createBackground() {
+            const container = document.getElementById('backgroundAnimation');
+            
+            // إضافة النجوم
+            for (let i = 0; i < 150; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                
+                const size = Math.random() * 4 + 1;
+                const x = Math.random() * 100;
+                const y = Math.random() * 100;
+                
+                star.style.width = `${size}px`;
+                star.style.height = `${size}px`;
+                star.style.left = `${x}%`;
+                star.style.top = `${y}%`;
+                star.style.animationDelay = `${Math.random() * 5}s`;
+                star.style.animationDuration = `${Math.random() * 4 + 2}s`;
+                
+                container.appendChild(star);
+            }
+            
+            // إضافة الفوانيس
+            for (let i = 0; i < 10; i++) {
+                const lantern = document.createElement('div');
+                lantern.className = 'lantern';
+                lantern.innerHTML = '🪔';
+                
+                const x = Math.random() * 90 + 5;
+                const y = Math.random() * 80 + 10;
+                
+                lantern.style.left = `${x}%`;
+                lantern.style.top = `${y}%`;
+                lantern.style.animationDelay = `${Math.random() * 8}s`;
+                lantern.style.fontSize = `${Math.random() * 15 + 25}px`;
+                
+                container.appendChild(lantern);
+            }
+            
+            // إضافة القمر
+            const moon = document.createElement('div');
+            moon.className = 'moon';
+            moon.innerHTML = '🌙';
+            moon.style.left = '10%';
+            moon.style.top = '10%';
+            container.appendChild(moon);
+        }
+        
+        // تحديث حالة رمضان
+        function updateRamadanStatus() {
+            // تاريخ رمضان التقريبي (باقي 14 يوم كما طلبت)
+            const ramadanStart = new Date();
+            ramadanStart.setDate(ramadanStart.getDate() + 14);
+            
+            const today = new Date();
+            const diffTime = ramadanStart - today;
+            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+            
+            const timerElement = document.getElementById('ramadanTimer');
+            const daysElement = document.getElementById('ramadanDays');
+            
+            daysElement.textContent = diffDays;
+            
+            if (diffDays > 0) {
+                timerElement.innerHTML = `
+                    <i class="fas fa-calendar-star"></i> 
+                    رمضان يبدأ بعد: <span id="ramadanDays">${diffDays}</span> يوم
+                `;
+            } else if (diffDays === 0) {
+                timerElement.innerHTML = `
+                    <i class="fas fa-calendar-star"></i> 
+                    رمضان كريم! السيرفر يبدأ اليوم
+                `;
+                document.querySelector('.status-badge').innerHTML = `
+                    <i class="fas fa-rocket"></i> يبدأ اليوم
+                `;
+                document.querySelector('.status-badge').style.background = '#27ae60';
+            } else {
+                timerElement.innerHTML = `
+                    <i class="fas fa-calendar-star"></i> 
+                    رمضان كريم! السيرفر يعمل الآن
+                `;
+                document.querySelector('.status-badge').innerHTML = `
+                    <i class="fas fa-play-circle"></i> يعمل الآن
+                `;
+                document.querySelector('.status-badge').style.background = '#27ae60';
+            }
+        }
+        
+        // التنقل بين الأقسام
+        function initNavigation() {
+            const navButtons = document.querySelectorAll('.nav-btn');
+            const sections = document.querySelectorAll('.section');
+            
+            navButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const targetId = this.getAttribute('data-target');
+                    
+                    // تحديث الأزرار النشطة
+                    navButtons.forEach(btn => {
+                        btn.classList.remove('active');
+                        btn.style.background = 'rgba(90, 45, 140, 0.7)';
+                    });
+                    
+                    this.classList.add('active');
+                    this.style.background = 'var(--accent-gold)';
+                    
+                    // إخفاء جميع الأقسام
+                    sections.forEach(section => {
+                        section.classList.remove('active');
+                        section.style.display = 'none';
+                    });
+                    
+                    // إظهار القسم المطلوب
+                    const targetSection = document.getElementById(targetId);
+                    if (targetSection) {
+                        targetSection.style.display = 'block';
+                        setTimeout(() => {
+                            targetSection.classList.add('active');
+                        }, 50);
+                        
+                        // التمرير للنصف العلوي للقسم
+                        window.scrollTo({
+                            top: targetSection.offsetTop - 120,
+                            behavior: 'smooth'
+                        });
+                    }
+                });
+            });
+            
+            // إظهار القسم النشط عند التحميل
+            setTimeout(() => {
+                document.querySelector('.nav-btn.active').click();
+            }, 100);
+        }
+        
+        // تحميل القوانين
+        function loadLaws() {
+            const laws = {
+                ethics: [
+                    {text: "الاحترام المتبادل: يمنع السب أو الشتم بجميع أشكاله", red: false},
+                    {text: "منع التنمر: يمنع السخرية من اللاعبين أو مضايقتهم", red: false},
+                    {text: "منع العنصرية: أي كلام عنصري أو طائفي يؤدي لـ (باند نهائي) 🔴", red: true},
+                    {text: "انتحال الشخصية: يمنع ادعاء أنك من الإدارة", red: false},
+                    {text: "الخصوصية: يمنع نشر أي معلومات شخصية عن اللاعبين", red: false},
+                    {text: "احترام أوقات الصلاة: يمنع إزعاج اللاعبين وقت الصلاة", red: false},
+                    {text: "منع الكلام السياسي: السيرفر للألعاب فقط، يمنع الحديث في السياسة", red: false},
+                    {text: "نشر الإشاعات: يمنع نشر أخبار كاذبة عن السيرفر أو الإدارة", red: false},
+                    {text: "الروح الرياضية: تقبل الخسارة في الفعاليات والحروب", red: false},
+                    {text: "المنشن المزعج: يمنع تكرار المنشن للإدارة دون سبب طارئ", red: false}
+                ],
+                building: [
+                    {text: "منع التخريب (Griefing): كسر بناء غيرك عقوبته (باند نهائي) 🔴", red: true},
+                    {text: "منع السرقة: أخذ أي غرض من صندوق لاعب آخر ممنوع تماماً", red: false},
+                    {text: "مسافات البناء: يجب ترك مسافة لا تقل عن 100 بلوكة عن جارك ما لم يأذن لك", red: false},
+                    {text: "المباني المسيئة: يمنع بناء أي أشكال غير لائقة", red: false},
+                    {text: "تخريب الطبيعة: يمنع ترك الشجر معلقاً أو تخريب شكل الأرض بشكل عشوائي", red: false},
+                    {text: "حفر الـ Chunks: يمنع حفر مساحات عملاقة تسبب لاق للسيرفر", red: false},
+                    {text: "حماية الحيوانات: يمنع قتل حيوانات اللاعبين الآخرين", red: false},
+                    {text: "البناء في السبوان: يمنع البناء في منطقة السبوان إلا بإذن الإدارة", red: false},
+                    {text: "اللوحات المستفزة (Signs): يمنع كتابة رسائل مسيئة على اللوحات", red: false},
+                    {text: "الاستيلاء على الأراضي: يمنع تسييج أرض واسعة دون البدء بالبناء فيها", red: false}
+                ],
+                technical: [
+                    {text: "منع الهاكات: استخدام أي نوع من الهاكات (Killaura, Fly) عقوبته (باند نهائي) 🔴", red: true},
+                    {text: "مود الـ X-ray: استخدامه لكشف الموارد ممنوع تماماً ويعرضك للشطب", red: false},
+                    {text: "استغلال الثغرات: أي ثغرة (Glitch) تجدها يجب إبلاغ الإدارة عنها فوراً", red: false},
+                    {text: "آلات اللاق: يمنع بناء آلات ريدستون ضخمة تعمل 24 ساعة دون توقف", red: false},
+                    {text: "الهروب من القتال (Combat Log): الخروج من السيرفر أثناء القتال يعرضك للعقوبة", red: false},
+                    {text: "الـ Auto Clicker: يمنع استخدامه في القتال أو المزارع", red: false},
+                    {text: "تخطي الحدود: يمنع محاولة الخروج عن حدود الخريطة (World Border)", red: false},
+                    {text: "المزارع العشوائية: يمنع ترك مزارع الموبات تعمل بشكل يراكم الكائنات ويسبب لاق", red: false},
+                    {text: "الـ AFK Fishing: يمنع استخدام مودات الصيد التلقائي", red: false},
+                    {text: "تغيير نسخة اللعبة: يمنع الدخول بنسخ غير متوافقة تسبب مشاكل تقنية", red: false}
+                ],
+                economy: [
+                    {text: "حرق الأسعار: يمنع بيع الأغراض بسعر أقل بكثير من سعر السوق الرسمي", red: false},
+                    {text: "الاحتيال التجاري: الكذب في الصفقات التجارية يعرضك للسجن", red: false},
+                    {text: "بيع الرتب: يمنع بيع رتبك أو مميزاتك مقابل موارد داخل اللعبة", red: false},
+                    {text: "عملة السيرفر: التعامل يكون بالعملة الرسمية المحددة فقط", red: false},
+                    {text: "المحلات التجارية: يجب الالتزام بالمساحة المخصصة لمحلك في السوق", red: false},
+                    {text: "منع الاحتكار: يمنع شراء كل كميات مورد معين للتحكم بسعره", red: false},
+                    {text: "المزادات: يمنع المزايدة الوهمية لرفع السعر دون نية الشراء", red: false},
+                    {text: "سرقة المتاجر: أي محاولة لسرقة متجر لاعب آخر عقوبتها شديدة", red: false},
+                    {text: "الديون: الإدارة غير مسؤولة عن الديون الشخصية بين اللاعبين", red: false},
+                    {text: "التجارة الخارجية: يمنع بيع موارد السيرفر مقابل مال حقيقي (باند نهائي) 🔴", red: true}
+                ],
+                social: [
+                    {text: "منع الإعلانات: يمنع نشر روابط سيرفرات أخرى نهائياً (باند نهائي) 🔴", red: true},
+                    {text: "السبام (Spam): يمنع تكرار الرسائل في الشات أو الواتساب", red: false},
+                    {text: "روابط الاختراق: نشر أي رابط مشبوه يؤدي للطرد الفوري", red: false},
+                    {text: "قوانين الواتساب: الالتزام بالأدب داخل قروب الواتساب الرسمي", red: false},
+                    {text: "الدعم الفني: تقديم الشكاوى يكون عبر نظام التذاكر أو الأرقام الرسمية فقط", red: false},
+                    {text: "التسريبات: يمنع نشر أي تحديثات إدارية لم تعلن رسمياً", red: false},
+                    {text: "غرف الصوت: يمنع تشغيل الموسيقى الصاخبة أو إزعاج الناس في الواتساب", red: false},
+                    {text: "طلب الرتب: يمنع الإلحاح بطلب رتبة (Admin) أو (Mod)", red: false},
+                    {text: "تحريض اللاعبين: يمنع تحريض اللاعبين على ترك السيرفر أو التخريب", red: false},
+                    {text: "تحديث القوانين: القوانين قابلة للتغيير حسب قرار الإدارة", red: false}
+                ]
+            };
+            
+            const container = document.getElementById('lawsContent');
+            const tabs = document.querySelectorAll('.law-tab');
+            
+            tabs.forEach(tab => {
+                tab.addEventListener('click', function() {
+                    const tabId = this.getAttribute('data-tab');
+                    
+                    // تحديث التبويبات النشطة
+                    tabs.forEach(t => t.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    // عرض القوانين
+                    displayLaws(tabId);
+                });
+            });
+            
+            // عرض التبويب الأول افتراضياً
+            displayLaws('ethics');
+            
+            function displayLaws(tabId) {
+                const lawsList = laws[tabId];
+                let html = `<div class="laws-content active" id="${tabId}-content">`;
+                
+                lawsList.forEach((law, index) => {
+                    const lawClass = law.red ? 'law-item law-red' : 'law-item';
+                    const color = getComputedStyle(document.documentElement).getPropertyValue(`--${tabId}-law`).trim();
+                    
+                    html += `
+                        <div class="${lawClass}" style="border-left-color: ${color};">
+                            <div class="law-number">
+                                <i class="fas fa-hashtag"></i>
+                                القانون ${index + 1}
+                            </div>
+                            <div class="law-text">${law.text}</div>
+                        </div>
+                    `;
+                });
+                
+                html += `</div>`;
+                container.innerHTML = html;
+            }
+        }
+        
+        // أنيميشن التمرير
+        function initScrollAnimation() {
+            const sections = document.querySelectorAll('.section');
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('active');
+                    }
+                });
+            }, {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            });
+            
+            sections.forEach(section => {
+                observer.observe(section);
+            });
+            
+            // تطبيق تأثيرات hover على العناصر
+            const hoverElements = document.querySelectorAll('.admin-card, .news-card, .founder-card, .law-item');
+            hoverElements.forEach(element => {
+                element.addEventListener('mouseenter', function() {
+                    this.style.transform = this.classList.contains('law-item') ? 'translateX(10px)' : 'translateY(-8px)';
+                });
+                
+                element.addEventListener('mouseleave', function() {
+                    this.style.transform = 'translateY(0)';
+                });
+            });
+        }
+    </script>
+</body>
+</html>
